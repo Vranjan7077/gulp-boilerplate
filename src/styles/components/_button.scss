@@ -1,0 +1,24 @@
+@use "../abstracts" as *;
+
+.c-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: space(1) space(2);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: $color-primary;
+  color: $color-primary-contrast;
+
+  &:hover {
+    filter: brightness(0.92);
+  }
+
+  &--outline {
+    background-color: transparent;
+    border-color: $color-border;
+    color: $color-text;
+  }
+}

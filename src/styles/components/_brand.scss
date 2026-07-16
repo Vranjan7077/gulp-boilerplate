@@ -1,0 +1,12 @@
+@use "../abstracts" as *;
+
+.c-brand {
+  display: flex;
+  align-items: center;
+  gap: space(1);
+  margin-bottom: space(2);
+
+  &__icon {
+    flex-shrink: 0;
+  }
+}

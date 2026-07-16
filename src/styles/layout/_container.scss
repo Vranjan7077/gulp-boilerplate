@@ -1,0 +1,12 @@
+@use "../abstracts" as *;
+
+.l-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: space(2);
+
+  @include respond-to("lg") {
+    padding-inline: space(3);
+  }
+}

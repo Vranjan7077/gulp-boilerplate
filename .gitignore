@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+npm-debug.log*
+
+# machine-specific config overrides
+config/local.ts
+
+# editor
+.vscode/*
+!.vscode/extensions.json

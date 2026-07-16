@@ -1,0 +1,9 @@
+@use "../abstracts" as *;
+
+.u-visually-hidden {
+  @extend %visually-hidden;
+}
+
+.u-hidden {
+  display: none !important;
+}

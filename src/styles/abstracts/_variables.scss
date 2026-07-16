@@ -1,0 +1,25 @@
+// Colors
+$color-text: #1a1a1a;
+$color-background: #fff;
+$color-primary: #2f6fed;
+$color-primary-contrast: #fff;
+$color-border: #dcdfe4;
+
+// Typography
+$font-family-base:
+  system-ui,
+  -apple-system,
+  "Segoe UI",
+  sans-serif;
+$font-size-base: 16px;
+
+// Spacing
+$space-unit: 8px;
+
+// Breakpoints
+$breakpoints: (
+  "sm": 480px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1280px,
+);

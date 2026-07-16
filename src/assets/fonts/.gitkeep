@@ -1,0 +1,2 @@
+Place font files (woff2, woff) here. Font licenses vary, so no fonts ship by default —
+this folder is copied to dist/assets/fonts as-is, no processing applied.

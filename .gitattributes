@@ -1,0 +1,5 @@
+* text=auto eol=lf
+
+*.{png,jpg,jpeg,gif,webp,avif,ico,woff,woff2,ttf,otf} binary
+
+.husky/* text eol=lf

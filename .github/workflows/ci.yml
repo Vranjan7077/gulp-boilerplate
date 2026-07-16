@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-title:
+    name: PR title follows Conventional Commits
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  quality:
+    name: Lint, format, type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run lint:styles
+      - run: npm run format:check
+      - run: npx tsc --noEmit
+
+  build:
+    name: Build (${{ matrix.os }}, Node ${{ matrix.node-version }})
+    needs: quality
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [20, 22]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run validate:html
+      - name: Upload build artifact
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 20
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  dev-server-smoke-test:
+    name: Dev server smoke test
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Start dev server and verify it serves real content
+        run: |
+          npm run dev &
+          timeout 30 bash -c 'until curl -sf http://localhost:3000/ > /dev/null; do sleep 1; done'
+          curl -sf http://localhost:3000/ | grep -q "gulp-boilerplate"
+          curl -sf http://localhost:3000/styles/main.css > /dev/null
+          curl -sf http://localhost:3000/scripts/main.js > /dev/null
+          curl -sf http://localhost:3000/browser-sync/browser-sync-client.js > /dev/null
+          kill %1
